@@ -27,9 +27,17 @@ httpServer.on("request", (req, res) => {
   });
 });
 
-// when a legit websocket req comes to it and get the connection
+// The wsServer (a WebSocket server) listens for incoming connection requests.
+// When a connection is established, the on("request") event is triggered.
 wsServer.on("request", (req) => {
+  /**
+   * The server accepts the incoming WebSocket request and establishes a connection with the client.
+   *  The second parameter, req.origin,ensures that the
+   * client comes from an allowed origin.
+   */
   const connection = req.accept(null, req.origin);
+
+  //After the connection is established, the server listens for any messages (msg) sent by the client.
   connection.on("message", (msg) => {
     connections.forEach((c) => {
       //someones sends a message to the server, the server sends it to all the clients

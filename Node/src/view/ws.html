@@ -5,18 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebSocket</title>
   </head>
-  <script>
-    let ws = new WebSocket("ws://localhost:3000");
-    ws.onopen = () => {
-      console.log("Connected to Server");
-      ws.send("Hello Server");
-    };
-    ws.onmessage = (e) => {
-      console.log(`Message from Server: ${e.data}`);
-    };
-  </script>
 
   <body>
     Learning WebSocket in Console
+    <div id="messages"></div>
+    <input type="text" id="input" />
+    <script>
+      let ws = new WebSocket("ws://localhost:3000");
+
+      ws.onmessage = (e) => {
+        const msgDiv = document.createElement("div");
+        msgDiv.innerText = e.data;
+        document.getElementById("messages").appendChild(msgDiv);
+      };
+      ws.onclose = () => {
+        console.log("Disconnected from Server");
+      };
+      document.getElementById("input").addEventListener("keyup", (e) => {
+        if (e.key === "Enter") {
+          ws.send(e.target.value);
+          e.target.value = "";
+        }
+      });
+    </script>
   </body>
 </html>
